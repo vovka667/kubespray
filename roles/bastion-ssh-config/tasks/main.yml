@@ -1,4 +1,10 @@
 ---
+- debug:
+    msg: "{{ groups }}"
+
+- debug:
+  var: hostvars[groups['bastion'][0]]
+
 - set_fact:
     bastion_ip: "{{ hostvars[groups['bastion'][0]]['ansible_host'] | d(hostvars[groups['bastion'][0]]['ansible_ssh_host']) }}"
   delegate_to: localhost
