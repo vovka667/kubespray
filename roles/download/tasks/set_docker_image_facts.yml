@@ -10,12 +10,23 @@
 - name: Register docker images info
   shell: >-
     {{ docker_bin_dir }}/docker images -q | xargs {{ docker_bin_dir }}/docker inspect -f "{{ '{{' }} if .RepoTags {{ '}}' }}{{ '{{' }} (index .RepoTags 0) {{ '}}' }}{{ '{{' }} end {{ '}}' }}{{ '{{' }} if .RepoDigests {{ '}}' }},{{ '{{' }} (index .RepoDigests 0) {{ '}}' }}{{ '{{' }} end {{ '}}' }}" | tr '\n' ','
-  no_log: true
   register: docker_images
   failed_when: false
   changed_when: false
   check_mode: no
   when: not download_always_pull
+
+- debug:
+  var: download_always_pull
+
+- debug:
+  var: pull_required
+
+- debug:
+  var: pull_by_digest
+
+- debug:
+  var: docker_images.stdout
 
 - set_fact:
     pull_required: >-
